@@ -1,9 +1,9 @@
+#keeping this here because I worked hard on it, but I discoverd the python function eval and does the same thing but better...
+"""
 def parse(string):
     listOfLists = []
     justAList = []
     charHolder = 'New'
-
-
 
     for char in string:
 
@@ -31,6 +31,7 @@ def parse(string):
                 justAList = []
             charHolder = charHolder + char
     return justAList[0] #pull off the extra list
+"""
 
 
 with open('input.txt') as f:
@@ -38,12 +39,14 @@ with open('input.txt') as f:
 
 leftArray = []
 rightArray = []
+
 x = 0
 while x < len(data):
-    leftArray.append(parse(data[x]))
-    rightArray.append(parse(data[x+1]))
+    leftArray.append(eval(data[x]))
+    rightArray.append(eval(data[x+1]))
     x += 3
 
 print('Parsing Done')
+
 
 
