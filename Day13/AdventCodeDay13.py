@@ -32,7 +32,7 @@ def parse(string):
             charHolder = charHolder + char
     return justAList[0] #pull off the extra list
 """
-
+from functools import cmp_to_key
 
 def compare(left,right):
     if isinstance(left, int) and isinstance(right, int):
@@ -78,6 +78,8 @@ while x < len(data):
     x += 3
 
 print('Parsing Done')
+
+#part 1
 result = 0
 for x in range(len(leftArray)):
     if compare(leftArray[x],rightArray[x]) == 1:
@@ -87,5 +89,18 @@ for x in range(len(leftArray)):
 print(result)
 
 
+#part 2
 
+leftArray.append([[2]])
+rightArray.append([[6]])
+
+totalArray = leftArray + rightArray
+
+totalArray = sorted(totalArray , key = cmp_to_key(compare), reverse = True)
+
+for i, x in enumerate(totalArray):
+    if x == [[2]]: indexOf2 = i
+    if x == [[6]]: indexOf6 = i
+
+print(((indexOf2+1)*(indexOf6+1)))
 
