@@ -31,12 +31,7 @@ for lineIndex, line in enumerate(dataSet):
 heap = []
 heap.append([0,startCoord[0],startCoord[1]])
 
-def sortFunc(a):
-    return a[0]
-
 while True:
-    #need to sort head so we are always working from the closest node? i feel like i am just putting/poping the heap wrong
-    heap.sort(key=sortFunc)
     dist, lineIndex, charIndex = heap.pop(0)
 
     if isVisted[lineIndex][charIndex] == '.':
@@ -53,7 +48,7 @@ while True:
             if isVisted[newLineIndex][newCharIndex] == '.':
                 if (grid[newLineIndex][newCharIndex] - grid[lineIndex][charIndex]) < 2:
                     isVisted[lineIndex][charIndex] = '<'
-                    heap.insert(0, [dist + 1,newLineIndex,newCharIndex])
+                    heap.append([dist + 1,newLineIndex,newCharIndex])
                     directionPicked = True
 
         #check right
@@ -63,7 +58,7 @@ while True:
             if isVisted[newLineIndex][newCharIndex] == '.':
                 if (grid[newLineIndex][newCharIndex] - grid[lineIndex][charIndex]) < 2:
                     isVisted[lineIndex][charIndex] = '>'
-                    heap.insert(0, [dist + 1,newLineIndex,newCharIndex])
+                    heap.append([dist + 1,newLineIndex,newCharIndex])
                     directionPicked = True
 
         #check up
@@ -73,7 +68,7 @@ while True:
             if isVisted[newLineIndex][newCharIndex] == '.':
                 if (grid[newLineIndex][newCharIndex] - grid[lineIndex][charIndex]) < 2:
                     isVisted[lineIndex][charIndex] = '^'
-                    heap.insert(0, [dist + 1,newLineIndex,newCharIndex])
+                    heap.append([dist + 1,newLineIndex,newCharIndex])
                     directionPicked = True
 
         #check down
@@ -83,7 +78,7 @@ while True:
             if isVisted[newLineIndex][newCharIndex] == '.':
                 if (grid[newLineIndex][newCharIndex] - grid[lineIndex][charIndex]) < 2:
                     isVisted[lineIndex][charIndex] = 'v'
-                    heap.insert(0, [dist + 1,newLineIndex,newCharIndex])
+                    heap.append([dist + 1,newLineIndex,newCharIndex])
                     directionPicked = True
 
 
@@ -106,8 +101,6 @@ heap.append([0,endCoord[0],endCoord[1]])
 
 
 while True:
-    #need to sort head so we are always working from the closest node? i feel like i am just putting/poping the heap wrong
-    heap.sort(key=sortFunc)
     dist, lineIndex, charIndex = heap.pop(0)
 
     if isVisted[lineIndex][charIndex] == '.':
@@ -124,7 +117,7 @@ while True:
             if isVisted[newLineIndex][newCharIndex] == '.':
                 if (grid[lineIndex][charIndex] - grid[newLineIndex][newCharIndex]) < 2:
                     isVisted[lineIndex][charIndex] = '<'
-                    heap.insert(0, [dist + 1,newLineIndex,newCharIndex])
+                    heap.append([dist + 1,newLineIndex,newCharIndex])
                     directionPicked = True
 
         #check right
@@ -134,7 +127,7 @@ while True:
             if isVisted[newLineIndex][newCharIndex] == '.':
                 if (grid[lineIndex][charIndex] - grid[newLineIndex][newCharIndex]) < 2:
                     isVisted[lineIndex][charIndex] = '>'
-                    heap.insert(0, [dist + 1,newLineIndex,newCharIndex])
+                    heap.append([dist + 1,newLineIndex,newCharIndex])
                     directionPicked = True
 
         #check up
@@ -144,7 +137,7 @@ while True:
             if isVisted[newLineIndex][newCharIndex] == '.':
                 if (grid[lineIndex][charIndex] - grid[newLineIndex][newCharIndex]) < 2:
                     isVisted[lineIndex][charIndex] = '^'
-                    heap.insert(0, [dist + 1,newLineIndex,newCharIndex])
+                    heap.append([dist + 1,newLineIndex,newCharIndex])
                     directionPicked = True
 
         #check down
@@ -154,7 +147,7 @@ while True:
             if isVisted[newLineIndex][newCharIndex] == '.':
                 if (grid[lineIndex][charIndex] - grid[newLineIndex][newCharIndex]) < 2:
                     isVisted[lineIndex][charIndex] = 'v'
-                    heap.insert(0, [dist + 1,newLineIndex,newCharIndex])
+                    heap.append([dist + 1,newLineIndex,newCharIndex])
                     directionPicked = True
 
 
