@@ -4,8 +4,9 @@ import math
 with open('testinput.txt') as f:
     dataSet = f.readlines()
 
-#part 1
 
+
+#part 1
 maxNumber = 999999999
 startCoord = [maxNumber,maxNumber]
 endCoord = [maxNumber,maxNumber]
@@ -22,7 +23,7 @@ for lineIndex, line in enumerate(dataSet):
             startCoord = [lineIndex, charIndex]
             char = 'a'
         if char == 'E':
-            endCoord = [lineIndex, charIndex]
+            endCoord = ([lineIndex, charIndex])
             char = 'z'
         grid[lineIndex].append(ord(char)-97)
         isVisted[lineIndex].append('.')
@@ -34,7 +35,7 @@ def sortFunc(a):
     return a[0]
 
 while True:
-    #need to sort head so we are always working from the closest node
+    #need to sort head so we are always working from the closest node? i feel like i am just putting/poping the heap wrong
     heap.sort(key=sortFunc)
     dist, lineIndex, charIndex = heap.pop(0)
 
@@ -92,127 +93,72 @@ while True:
 print(dist)
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-#part 2
-
-#reinit
-maxNumber = 999999999
-startCoord = [maxNumber,maxNumber]
-endCoord = [maxNumber,maxNumber]
-currentBest = maxNumber
-grid = []
+#part 2 start at end
 isVisted = []
-
-
-for lineIndex, line in enumerate(dataSet):
-    grid.append([])
+for lineIndex, line in enumerate(grid):
     isVisted.append([])
-    for charIndex, char in enumerate(line.strip('\n')):
-        if char == 'S':
-            startCoord = [lineIndex, charIndex]
-            char = 'a'
-        if char == 'E':
-            endCoord = [lineIndex, charIndex]
-            char = 'z'
-        grid[lineIndex].append(ord(char)-97)
+    for charIndex, char in enumerate(grid[0]):
         isVisted[lineIndex].append('.')
 
 
-lowPointList = []
-
-for lineIndex, line in enumerate(grid):
-    for charIndex, char in enumerate(grid[0]):
-        if char == 0:
-            lowPointList.append([lineIndex,charIndex])
+heap = []
+heap.append([0,endCoord[0],endCoord[1]])
 
 
+while True:
+    #need to sort head so we are always working from the closest node? i feel like i am just putting/poping the heap wrong
+    heap.sort(key=sortFunc)
+    dist, lineIndex, charIndex = heap.pop(0)
 
-for start in lowPointList:
-    
-    isVisted = []
-    for lineIndex, line in enumerate(dataSet):
-        isVisted.append([])
-        for charIndex, char in enumerate(line.strip('\n')):
-            isVisted[lineIndex].append('.')
+    if isVisted[lineIndex][charIndex] == '.':
 
+        if grid[lineIndex][charIndex] == 0: 
+            break
 
-    heap = []
-    heap.append([0,start[0],start[1]])
+        directionPicked = False
 
-    while True:
-        #need to sort head so we are always working from the closest node
-        heap.sort(key=sortFunc)
-        dist, lineIndex, charIndex = heap.pop(0)
+        #check left
+        if (0 < charIndex <= len(grid[0])-1):
+            newLineIndex = lineIndex
+            newCharIndex = charIndex - 1
+            if isVisted[newLineIndex][newCharIndex] == '.':
+                if (grid[lineIndex][charIndex] - grid[newLineIndex][newCharIndex]) < 2:
+                    isVisted[lineIndex][charIndex] = '<'
+                    heap.insert(0, [dist + 1,newLineIndex,newCharIndex])
+                    directionPicked = True
 
-        if isVisted[lineIndex][charIndex] == '.':
+        #check right
+        if (0 <= charIndex < len(grid[0])-1):
+            newLineIndex = lineIndex
+            newCharIndex = charIndex + 1
+            if isVisted[newLineIndex][newCharIndex] == '.':
+                if (grid[lineIndex][charIndex] - grid[newLineIndex][newCharIndex]) < 2:
+                    isVisted[lineIndex][charIndex] = '>'
+                    heap.insert(0, [dist + 1,newLineIndex,newCharIndex])
+                    directionPicked = True
 
-            if [lineIndex,charIndex] == endCoord: 
-                break
+        #check up
+        if (0 < lineIndex <= len(grid)-1):
+            newLineIndex = lineIndex - 1
+            newCharIndex = charIndex
+            if isVisted[newLineIndex][newCharIndex] == '.':
+                if (grid[lineIndex][charIndex] - grid[newLineIndex][newCharIndex]) < 2:
+                    isVisted[lineIndex][charIndex] = '^'
+                    heap.insert(0, [dist + 1,newLineIndex,newCharIndex])
+                    directionPicked = True
 
-            directionPicked = False
-
-            #check left
-            if (0 < charIndex <= len(grid[0])-1):
-                newLineIndex = lineIndex
-                newCharIndex = charIndex - 1
-                if isVisted[newLineIndex][newCharIndex] == '.':
-                    if (grid[newLineIndex][newCharIndex] - grid[lineIndex][charIndex]) < 2:
-                        isVisted[lineIndex][charIndex] = '<'
-                        heap.insert(0, [dist + 1,newLineIndex,newCharIndex])
-                        directionPicked = True
-
-            #check right
-            if (0 <= charIndex < len(grid[0])-1):
-                newLineIndex = lineIndex
-                newCharIndex = charIndex + 1
-                if isVisted[newLineIndex][newCharIndex] == '.':
-                    if (grid[newLineIndex][newCharIndex] - grid[lineIndex][charIndex]) < 2:
-                        isVisted[lineIndex][charIndex] = '>'
-                        heap.insert(0, [dist + 1,newLineIndex,newCharIndex])
-                        directionPicked = True
-
-            #check up
-            if (0 < lineIndex <= len(grid)-1):
-                newLineIndex = lineIndex - 1
-                newCharIndex = charIndex
-                if isVisted[newLineIndex][newCharIndex] == '.':
-                    if (grid[newLineIndex][newCharIndex] - grid[lineIndex][charIndex]) < 2:
-                        isVisted[lineIndex][charIndex] = '^'
-                        heap.insert(0, [dist + 1,newLineIndex,newCharIndex])
-                        directionPicked = True
-
-            #check down
-            if (0 <= lineIndex < len(grid)-1):
-                newLineIndex = lineIndex + 1
-                newCharIndex = charIndex
-                if isVisted[newLineIndex][newCharIndex] == '.':
-                    if (grid[newLineIndex][newCharIndex] - grid[lineIndex][charIndex]) < 2:
-                        isVisted[lineIndex][charIndex] = 'v'
-                        heap.insert(0, [dist + 1,newLineIndex,newCharIndex])
-                        directionPicked = True
+        #check down
+        if (0 <= lineIndex < len(grid)-1):
+            newLineIndex = lineIndex + 1
+            newCharIndex = charIndex
+            if isVisted[newLineIndex][newCharIndex] == '.':
+                if (grid[lineIndex][charIndex] - grid[newLineIndex][newCharIndex]) < 2:
+                    isVisted[lineIndex][charIndex] = 'v'
+                    heap.insert(0, [dist + 1,newLineIndex,newCharIndex])
+                    directionPicked = True
 
 
-            if directionPicked == False:
-                isVisted[lineIndex][charIndex] = 'o'
+        if directionPicked == False:
+            isVisted[lineIndex][charIndex] = 'o'
 
-    if dist < currentBest: currentBest = dist
-
-print(currentBest)
+print(dist)
